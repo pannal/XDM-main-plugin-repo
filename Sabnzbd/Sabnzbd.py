@@ -50,6 +50,11 @@ class Sabnzbd(Downloader):
             if not host.startswith('http'):
                 host = "http://%s" % host
 
+        # remove trailing / to add port;
+        #fixme: use actual url parser
+        if host.endswith("/"):
+            host = host[:-1]
+
         if not port:
             port = self.c.port
 

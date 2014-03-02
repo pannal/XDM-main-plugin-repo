@@ -1,10 +1,11 @@
-# Author: Dennis Lutter <lad1337@gmail.com>
-# URL: https://github.com/lad1337/XDM-main-plugin-repo/
+# Author: panni <panni@fragstore.net>
+# URL: https://github.com/pannal/XDM-pannal-plugin-repo/
 #
 # This file is part of a XDM plugin.
+# based on de.lad1337.simple.mover and de.lad1337.movie.simplemover
 #
 # XDM plugin.
-# Copyright (C) 2013  Dennis Lutter
+# Copyright (C) 2014  panni
 #
 # This plugin is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -30,6 +31,9 @@ from os import path
 
 
 class AdvancedMover(PostProcessor):
+    """
+    more or less advanced moving postprocessor
+    """
     identifier = 'de.pannal.advancedmover'
     version = "0.1"
     _config = {

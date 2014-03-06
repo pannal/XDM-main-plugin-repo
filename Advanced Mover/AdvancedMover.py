@@ -23,12 +23,8 @@
 from xdm.plugins import *
 from xdm import helper
 import time
-import fnmatch
-import os, sys
-import re
+import os
 import shutil
-from os import path
-
 
 class AdvancedMover(PostProcessor):
     """
@@ -41,12 +37,14 @@ class AdvancedMover(PostProcessor):
                 'skip_sample': False,
                 "replace_space_with": " ",
                 'final_path': "",
-                "rename_folder_to_element": False,
+                "rename_folders_to_element": False,
                 "rename_files_to_element": False,
                 'allowed_extensions': {
                         "options": [".avi", ".mkv", ".iso", ".mp4", ".m4v", ".mp3", ".flac",
                                     ".aac", ".nfo", ".png", ".gif", ".bmp", ".jpg"],
                         "selected": [".avi", ".mkv"],
+                        "use_checkboxes": True,
+                        "required": True,
                     }
     }
     screenName = 'Advanced Mover'
@@ -55,23 +53,15 @@ class AdvancedMover(PostProcessor):
                    'copy': {'desc': 'If this is on the Folder will be copied instead of moved.'},
                    'skip_sample': {'desc': 'Skip sample files (mostly movies/TV)'},
                    }
-    useConfigsForElementsAs = 'Path'
+    addMediaTypeOptions = "runFor"
+    #useConfigsForElementsAs = 'Enable'
+    _allowed_extensions = []
+    _selected_extensions = []
 
     def __init__(self, instance='Default'):
-        for mtm in common.PM.getMediaTypeManager():
-            prefix = self.useConfigsForElementsAs
-            sufix = mtm.type
-            h_name = '%s for %s' % (prefix, sufix)
-            c_name = helper.replace_some('%s %s %s' % (mtm.name, prefix.lower(), sufix))
-            self._config[c_name] = None
-            self.config_meta[c_name] = {'human': h_name,
-                                        'type': self.useConfigsForElementsAs.lower(),
-                                        'mediaType': mtm.mt,
-                                        'element': mtm.root}
-
         PostProcessor.__init__(self, instance=instance)
-
-        self.extensions = self.c.allowed_extensions.selected
+        self._allowed_extensions = self.c.allowed_extensions.options
+        self._allowed_extensions_selected = self.c.allowed_extensions.selected
 
     def postProcessPath(self, element, filePath):
         destPath = self.c.final_path
@@ -97,7 +87,7 @@ class AdvancedMover(PostProcessor):
             for root, dirnames, filenames in os.walk(filePath):
                 processLogger("I can see the files %s" % filenames)
                 for filename in filenames:
-                    if filename.endswith(self._allowed_extensions):
+                    if filename.endswith(self._allowed_extensions_selected):
                         if self.c.skip_sample and 'sample' in filename.lower():
                             processLogger("Skipping sample: %s" % filename)
                             continue
@@ -118,7 +108,7 @@ class AdvancedMover(PostProcessor):
             processLogger("Processing file: %s" % curFile)
             try:
                 extension = os.path.splitext(curFile)[1]
-                folderName = element.getName() if self.c.rename_folder_to_element else os.path.basename(os.path.dirname(curFile))
+                folderName = element.getName() if self.c.rename_folders_to_element else os.path.basename(os.path.dirname(curFile))
                 fileNameBase = element.getName() if self.c.rename_files_to_element else os.path.splitext(os.path.basename(curFile))[0]
                 if len(allFileLocations) > 1:
                     newFileName = u"%s CD%s%s" % (fileNameBase, (index + 1), extension)

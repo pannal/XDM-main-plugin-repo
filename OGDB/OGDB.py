@@ -1,10 +1,10 @@
-# Author: Dennis Lutter <lad1337@gmail.com>
-# URL: https://github.com/lad1337/XDM-main-plugin-repo/
+# Author: panni <panni@fragstore.net>
+# URL: https://github.com/pannal/XDM-pannal-plugin-repo/
 #
 # This file is part of a XDM plugin.
 #
 # XDM plugin.
-# Copyright (C) 2013  Dennis Lutter
+# Copyright (C) 2014  panni
 #
 # This plugin is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -28,14 +28,14 @@ import re
 from dateutil.parser import parser as dateParser
 
 
-class TheGamesDB(Provider):
-    version = "0.12"
-    identifier = "de.lad1337.boxcar.TheGamesDB"
-    _tag = 'tgdb'
+class OGDB(Provider):
+    version = "0.1"
+    identifier = "de.pannal.boxcar.OGDB"
+    _tag = 'ogdb'
     single = True
     types = ['de.lad1337.games']
     _config = {'enabled': True}
-    config_meta = {'plugin_desc': 'THE information provider for games. Missing anything? check out http://thegamesdb.net'
+    config_meta = {'plugin_desc': 'The alternative games DB, http://ogdb.eu/'
                    }
     _pCache = {}
 

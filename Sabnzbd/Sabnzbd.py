@@ -24,7 +24,7 @@ import requests, urlparse
 
 
 class Sabnzbd(Downloader):
-    version = "0.4"
+    version = "0.5"
     identifier = "de.pannal.sabnzbd"
     _config = {
         'port': 8083,

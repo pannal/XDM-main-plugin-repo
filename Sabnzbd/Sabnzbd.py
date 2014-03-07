@@ -1,10 +1,11 @@
-# Author: Dennis Lutter <lad1337@gmail.com>
-# URL: https://github.com/lad1337/XDM
+# Author: panni <panni@fragstore.net>
+# URL: https://github.com/pannal/XDM-pannal-plugin-repo/
 #
-# This file is part of XDM: eXtentable Download Manager.
+# This file is part of a XDM plugin.
+# based on de.lad1337.sabnzbd
 #
-# XDM: eXtentable Download Manager. Plugin based media collection manager.
-# Copyright (C) 2013  Dennis Lutter
+# XDM plugin.
+# Copyright (C) 2014  panni
 #
 # XDM is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -24,7 +25,7 @@ import requests, urlparse
 
 
 class Sabnzbd(Downloader):
-    version = "0.5"
+    version = "0.41"
     identifier = "de.pannal.sabnzbd"
     _config = {
         'port': 8083,

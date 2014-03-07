@@ -31,7 +31,7 @@ class Sabnzbd(Downloader):
         'port': 8083,
         'host': 'http://localhost',
         'apikey': '',
-        'downloadName': u'{download-name} (XDM.{element-id}-{download-id})' #'{title} (XDM.{element-id}-{download-id}'
+        'downloadName': u'{download-name}'# (XDM.{element-id}-{download-id})' #'{title} (XDM.{element-id}-{download-id}'
     }
     config_meta = {
         'downloadName': '{title}: the title of the element; {element-id}; {download-id}; {download-name}: original name returned by indexer; {download-size}; {external-id}; {type}'

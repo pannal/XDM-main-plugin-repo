@@ -30,7 +30,7 @@ from dateutil.parser import parser as dateParser
 
 class OGDB(Provider):
     version = "0.1"
-    identifier = "de.pannal.boxcar.OGDB"
+    identifier = "de.pannal.games.OGDB"
     _tag = 'ogdb'
     single = True
     types = ['de.lad1337.games']

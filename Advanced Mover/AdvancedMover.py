@@ -40,8 +40,10 @@ class AdvancedMover(PostProcessor):
                 "rename_folders_to_element": False,
                 "rename_files_to_element": False,
                 'allowed_extensions': {
-                        "options": [".avi", ".mkv", ".iso", ".mp4", ".m4v", ".mp3", ".flac",
-                                    ".aac", ".nfo", ".png", ".gif", ".bmp", ".jpg"],
+                        "options": sorted([".avi", ".mkv", ".iso", ".mp4", ".m4v", ".mp3", ".flac",
+                                    ".aac", ".nfo", ".png", ".gif", ".bmp", ".jpg", ".sfv", ".zip",
+                                    ".rar", ".7z", ".tar", ".tar.gz", ".tar.bz", ".tar.bz2", ".srt",
+                                    ".txt", ".exe"]),
                         "selected": [".avi", ".mkv"],
                         "use_checkboxes": True,
                         "required": True,
@@ -55,13 +57,13 @@ class AdvancedMover(PostProcessor):
                    }
     addMediaTypeOptions = "runFor"
     #useConfigsForElementsAs = 'Enable'
-    _allowed_extensions = []
-    _selected_extensions = []
+    _allowed_extensions = ()
+    _selected_extensions = ()
 
     def __init__(self, instance='Default'):
         PostProcessor.__init__(self, instance=instance)
-        self._allowed_extensions = self.c.allowed_extensions.options
-        self._allowed_extensions_selected = self.c.allowed_extensions.selected
+        self._allowed_extensions = tuple(self.c.allowed_extensions.options)
+        self._allowed_extensions_selected = tuple(self.c.allowed_extensions.selected)
 
     def postProcessPath(self, element, filePath):
         destPath = self.c.final_path
@@ -110,14 +112,10 @@ class AdvancedMover(PostProcessor):
                 extension = os.path.splitext(curFile)[1]
                 folderName = element.getName() if self.c.rename_folders_to_element else os.path.basename(os.path.dirname(curFile))
                 fileNameBase = element.getName() if self.c.rename_files_to_element else os.path.splitext(os.path.basename(curFile))[0]
-                if len(allFileLocations) > 1:
-                    newFileName = u"%s CD%s%s" % (fileNameBase, (index + 1), extension)
-                else:
-                    newFileName = fileNameBase + extension
-                newFileName = fixName(newFileName, self.c.replace_space_with)
+                newFileName = fixName(fileNameBase + extension, self.c.replace_space_with)
                 processLogger("New Filename shall be: %s" % newFileName)
 
-                destFolder = os.path.join(destPath, folderName, self.c.replace_space_with)
+                destFolder = os.path.join(destPath, fixName(folderName, self.c.replace_space_with))
                 if not os.path.isdir(destFolder):
                     os.mkdir(destFolder)
                 dest = os.path.join(destFolder, newFileName)
@@ -130,7 +128,7 @@ class AdvancedMover(PostProcessor):
                     shutil.move(curFile, dest)
 
             except Exception, msg:
-                processLogger("Unable to rename and move Movie: %s. Please process manually" % curFile)
+                processLogger("Unable to rename and move File: %s. Please process manually" % curFile)
                 processLogger("given ERROR: %s" % msg)
                 success = False
 

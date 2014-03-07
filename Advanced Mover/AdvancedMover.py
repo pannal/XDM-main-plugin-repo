@@ -43,7 +43,7 @@ class AdvancedMover(PostProcessor):
                         "options": sorted([".avi", ".mkv", ".iso", ".mp4", ".m4v", ".mp3", ".flac",
                                     ".aac", ".nfo", ".png", ".gif", ".bmp", ".jpg", ".sfv", ".zip",
                                     ".rar", ".7z", ".tar", ".tar.gz", ".tar.bz", ".tar.bz2", ".srt",
-                                    ".txt", ".exe"]),
+                                    ".txt", ".exe", ".apk", ".obb"]),
                         "selected": [".avi", ".mkv"],
                         "use_checkboxes": True,
                         "required": True,
@@ -62,6 +62,12 @@ class AdvancedMover(PostProcessor):
 
     def __init__(self, instance='Default'):
         PostProcessor.__init__(self, instance=instance)
+        # update allowed_extensions if plugin defaults were updated
+        if self.c.allowed_extensions.options != self._config["allowed_extensions"]["options"]:
+            opts = self._config["allowed_extensions"]
+            opts.update(self.c.allowed_extensions.selected)
+            self.c.allowed_extensions = opts
+
         self._allowed_extensions = tuple(self.c.allowed_extensions.options)
         self._allowed_extensions_selected = tuple(self.c.allowed_extensions.selected)
 

@@ -21,6 +21,7 @@
 # along with this program.  If not, see http://www.gnu.org/licenses/.
 
 from xdm.plugins import *
+from xdm.classes import Download
 import requests, urlparse
 
 
@@ -39,6 +40,13 @@ class Sabnzbd(Downloader):
     _history = []
     _queue = []
     types = ['de.lad1337.nzb']
+
+    # supposed to hold a cache of (elementID, downloadID) for current downloads to minimize DB impact, don't know if this is even needed
+    _idCache = {}
+
+    def __init__(self, instance='Default'):
+        super(Sabnzbd, self).__init__(instance=instance)
+        self._idCache = {}
 
     def _baseUrl(self, host=None, port=0):
         host = host or self.c.host
@@ -64,6 +72,24 @@ class Sabnzbd(Downloader):
             "type": download.type,
         }
         return self.c.downloadName.format(**map)
+
+    def _findIDs(self, s):
+        """
+        this returns the element/download ids based on the database, not the downloadName as before.
+        leads to redundant DB calls until the whole usage of findIDs is fixed.
+        """
+        if not self._idCache.has_key(s):
+            log("%s not found in IDCache, fetching ..." % s)
+            try:
+                d = Download.select().where(Download.name == s).get()
+                log("found %s for %s" % (d.id, s))
+                self._idCache[s] = (d.element.id, d.id)
+            except Download.DoesNotExist:
+                return (None, None)
+        else:
+            log("%s found in IDCache (%s)" % (s, self._idCache[s]))
+
+        return self._idCache[s]
 
     def addDownload(self, download):
         payload = {'apikey': self.c.apikey,

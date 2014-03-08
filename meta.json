@@ -5,7 +5,7 @@
         "de.pannal.advancedmover": [
             {
                 "major_version": 0, 
-                "minor_version": 1, 
+                "minor_version": 11, 
                 "name": "Advanced Mover", 
                 "type": "PostProcessor", 
                 "format": "zip", 
@@ -18,10 +18,26 @@
                 "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
             }
         ], 
+        "de.pannal.element.name": [
+            {
+                "major_version": 0, 
+                "minor_version": 1, 
+                "name": "Modify Name To Look For", 
+                "type": "SearchTermFilter", 
+                "format": "zip", 
+                "desc": "This enables your to look for a different name than detected by the provider's returned name (e.g. if the release was named wrongly and you know it, change this for a single element)", 
+                "xdm_version": [
+                    0, 
+                    5, 
+                    19
+                ], 
+                "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
+            }
+        ], 
         "de.pannal.sabnzbd": [
             {
                 "major_version": 0, 
-                "minor_version": 5, 
+                "minor_version": 41, 
                 "name": "Sabnzbd", 
                 "type": "Downloader", 
                 "format": "zip", 

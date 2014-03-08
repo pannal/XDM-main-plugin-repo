@@ -1,0 +1,112 @@
+************* Module PostProcessor.Advanced Mover.AdvancedMover
+R: 84,4:AdvancedMover.postProcessPath: Too many local variables (30/15)
+W:147,23:AdvancedMover.postProcessPath: Catching too general exception Exception
+W:154,32:AdvancedMover.postProcessPath: Unused variable 'files'
+W:126,16:AdvancedMover.postProcessPath: Unused variable 'index'
+W:105,22:AdvancedMover.postProcessPath: Unused variable 'dirnames'
+R: 84,4:AdvancedMover.postProcessPath: Too many branches (26/12)
+R: 84,4:AdvancedMover.postProcessPath: Too many statements (65/50)
+
+
+Report
+======
+104 statements analysed.
+
+Duplication
+-----------
+
++-------------------------+------+---------+-----------+
+|                         |now   |previous |difference |
++=========================+======+=========+===========+
+|nb duplicated lines      |0     |0        |=          |
++-------------------------+------+---------+-----------+
+|percent duplicated lines |0.000 |0.000    |=          |
++-------------------------+------+---------+-----------+
+
+
+
+Raw metrics
+-----------
+
++----------+-------+------+---------+-----------+
+|type      |number |%     |previous |difference |
++==========+=======+======+=========+===========+
+|code      |109    |64.50 |109      |=          |
++----------+-------+------+---------+-----------+
+|docstring |26     |15.38 |24       |+2.00      |
++----------+-------+------+---------+-----------+
+|comment   |24     |14.20 |24       |=          |
++----------+-------+------+---------+-----------+
+|empty     |10     |5.92  |9        |+1.00      |
++----------+-------+------+---------+-----------+
+
+
+
+Messages by category
+--------------------
+
++-----------+-------+---------+-----------+
+|type       |number |previous |difference |
++===========+=======+=========+===========+
+|convention |0      |0        |=          |
++-----------+-------+---------+-----------+
+|refactor   |3      |3        |=          |
++-----------+-------+---------+-----------+
+|warning    |4      |4        |=          |
++-----------+-------+---------+-----------+
+|error      |0      |0        |=          |
++-----------+-------+---------+-----------+
+
+
+
+Messages
+--------
+
++-----------+------------+
+|message id |occurrences |
++===========+============+
+|W0612      |3           |
++-----------+------------+
+|W0703      |1           |
++-----------+------------+
+|R0915      |1           |
++-----------+------------+
+|R0914      |1           |
++-----------+------------+
+|R0912      |1           |
++-----------+------------+
+
+
+
+Global evaluation
+-----------------
+Your code has been rated at 9.33/10 (previous run: 9.33/10)
+
+Statistics by type
+------------------
+
++---------+-------+-----------+-----------+------------+---------+
+|type     |number |old number |difference |%documented |%badname |
++=========+=======+===========+===========+============+=========+
+|module   |1      |1          |=          |0.00        |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|class    |1      |1          |=          |100.00      |0.00     |
++---------+-------+-----------+-----------+------------+---------+
+|method   |2      |2          |=          |100.00      |50.00    |
++---------+-------+-----------+-----------+------------+---------+
+|function |2      |2          |=          |0.00        |100.00   |
++---------+-------+-----------+-----------+------------+---------+
+
+
+
+External dependencies
+---------------------
+::
+
+    os (PostProcessor.Advanced Mover.AdvancedMover)
+    shutil (PostProcessor.Advanced Mover.AdvancedMover)
+    xdm 
+      \-helper (PostProcessor.Advanced Mover.AdvancedMover)
+
+
+

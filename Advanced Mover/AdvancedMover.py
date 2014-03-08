@@ -30,8 +30,9 @@ class AdvancedMover(PostProcessor):
     """
     more or less advanced moving postprocessor
     """
+    # fix locations
     identifier = 'de.pannal.advancedmover'
-    version = "0.1"
+    version = "0.11"
     _config = {
                 'copy': False,
                 'skip_sample': False,
@@ -39,6 +40,8 @@ class AdvancedMover(PostProcessor):
                 'final_path': "",
                 "rename_folders_to_element": False,
                 "rename_files_to_element": False,
+                'delete_empty_folders_after_move': False,
+                'delete_folder_after_move': True,
                 'allowed_extensions': {
                         "options": sorted([".avi", ".mkv", ".iso", ".mp4", ".m4v", ".mp3", ".flac",
                                     ".aac", ".nfo", ".png", ".gif", ".bmp", ".jpg", ".sfv", ".zip",
@@ -54,6 +57,10 @@ class AdvancedMover(PostProcessor):
                    'replace_space_with': {'desc': 'All spaces for the final file will be replaced with this.'},
                    'copy': {'desc': 'If this is on the Folder will be copied instead of moved.'},
                    'skip_sample': {'desc': 'Skip sample files (mostly movies/TV)'},
+                   'delete_empty_folders_after_move': {'desc': "Delete possibly empty folders in the original location including the location itself if empty after moving?"},
+                   'delete_folder_after_move': {'desc': "Delete non-empty folders in the original location including the location itself after moving?"},
+                   'rename_folders_to_element': {'desc': "Rename target folders to the element/download name"},
+                   'rename_files_to_element': {'desc': "Rename target files to the element/download name"},
                    }
     addMediaTypeOptions = "runFor"
     #useConfigsForElementsAs = 'Enable'
@@ -70,6 +77,9 @@ class AdvancedMover(PostProcessor):
 
         self._allowed_extensions = tuple(self.c.allowed_extensions.options)
         self._allowed_extensions_selected = tuple(self.c.allowed_extensions.selected)
+
+        # delete_folder_after_move overrides delete_empty_folders_after_move
+        self.c.delete_empty_folders_after_move = False if self.c.delete_folder_after_move else self.c.delete_empty_folders_after_move
 
     def postProcessPath(self, element, filePath):
         destPath = self.c.final_path
@@ -93,50 +103,69 @@ class AdvancedMover(PostProcessor):
         if os.path.isdir(filePath):
             processLogger("Starting file scan on %s" % filePath)
             for root, dirnames, filenames in os.walk(filePath):
-                processLogger("I can see the files %s" % filenames)
-                for filename in filenames:
-                    if filename.endswith(self._allowed_extensions_selected):
-                        if self.c.skip_sample and 'sample' in filename.lower():
-                            processLogger("Skipping sample: %s" % filename)
-                            continue
-                        curImage = os.path.join(root, filename)
-                        allFileLocations.append(curImage)
-                        processLogger("Found file: %s" % curImage)
+                if len(filenames):
+                    processLogger("I can see the files %s" % filenames)
+                    for filename in filenames:
+                        if filename.endswith(self._allowed_extensions_selected):
+                            if self.c.skip_sample and 'sample' in filename.lower():
+                                processLogger("Skipping sample: %s" % filename)
+                                continue
+                            curImage = os.path.join(root, filename)
+                            allFileLocations.append(curImage)
+                            processLogger("Found file: %s" % curImage)
             if not allFileLocations:
                 processLogger("No files found!")
-                return (False, processLog[0])
+                #return (False, processLog[0])
         else:
             allFileLocations = [filePath]
 
-        processLogger("Possibly renaming and moving Files")
         success = True
-        allFileLocations.sort()
         dest = None
-        for index, curFile in enumerate(allFileLocations):
-            processLogger("Processing file: %s" % curFile)
-            try:
-                extension = os.path.splitext(curFile)[1]
-                folderName = element.getName() if self.c.rename_folders_to_element else os.path.basename(os.path.dirname(curFile))
-                fileNameBase = element.getName() if self.c.rename_files_to_element else os.path.splitext(os.path.basename(curFile))[0]
-                newFileName = fixName(fileNameBase + extension, self.c.replace_space_with)
-                processLogger("New Filename shall be: %s" % newFileName)
+        if allFileLocations:
+            processLogger("Possibly renaming and moving Files")
+            allFileLocations.sort()
+            for index, curFile in enumerate(allFileLocations):
+                processLogger("Processing file: %s" % curFile)
+                try:
+                    extension = os.path.splitext(curFile)[1]
+                    folderName = element.getName() if self.c.rename_folders_to_element else os.path.basename(os.path.dirname(curFile))
+                    fileNameBase = element.getName() if self.c.rename_files_to_element else os.path.splitext(os.path.basename(curFile))[0]
+                    newFileName = fixName(fileNameBase + extension, self.c.replace_space_with)
+                    processLogger("New Filename shall be: %s" % newFileName)
 
-                destFolder = os.path.join(destPath, fixName(folderName, self.c.replace_space_with))
-                if not os.path.isdir(destFolder):
-                    os.mkdir(destFolder)
-                dest = os.path.join(destFolder, newFileName)
+                    destFolder = os.path.join(destPath, fixName(folderName, self.c.replace_space_with))
+                    if not os.path.isdir(destFolder):
+                        os.mkdir(destFolder)
+                    dest = os.path.join(destFolder, newFileName)
 
-                if self.c.copy:
-                    msg = "Copying %s to %s" % (curFile, dest)
-                    shutil.copytree(curFile, dest)
-                else:
-                    msg = "Moving %s to %s" % (curFile, dest)
-                    shutil.move(curFile, dest)
+                    if self.c.copy:
+                        msg = "Copying %s to %s" % (curFile, dest)
+                        shutil.copytree(curFile, dest)
+                    else:
+                        msg = "Moving %s to %s" % (curFile, dest)
+                        shutil.move(curFile, dest)
 
-            except Exception, msg:
-                processLogger("Unable to rename and move File: %s. Please process manually" % curFile)
-                processLogger("given ERROR: %s" % msg)
-                success = False
+                except Exception, msg:
+                    processLogger("Unable to rename and move File: %s. Please process manually" % curFile)
+                    processLogger("given ERROR: %s" % msg)
+                    success = False
+
+        if not self.c.copy:
+            if self.c.delete_empty_folders_after_move:
+                for root, dirs, files in os.walk(filePath, topdown=False):
+                    for name in dirs:
+                        fname = os.path.join(root, name)
+                        if not os.listdir(fname): #to check wither the dir is empty
+                            os.removedirs(fname)
+                            processLogger("removed empty folder %s" % fname)
+                if not os.listdir(filePath):
+                    os.removedirs(filePath)
+                    processLogger("removed empty folder %s" % filePath)
+
+            if self.c.delete_folder_after_move:
+                shutil.rmtree(filePath)
+                processLogger("removed %s completely" % filePath)
+
 
         processLogger("File processing done")
         # write process log

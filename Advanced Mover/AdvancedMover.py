@@ -22,6 +22,7 @@
 
 from xdm.plugins import *
 from xdm import helper
+from xdm.classes import Location
 import time
 import os
 import shutil
@@ -84,7 +85,7 @@ class AdvancedMover(PostProcessor):
     def postProcessPath(self, element, filePath):
         destPath = self.c.final_path
         if not destPath:
-            msg = "Destination path for %s is not set. Stopping PP." % element
+            msg = u"Destination path for %s is not set. Stopping PP." % element
             log.warning(msg)
             return (False, msg)
         # log of the whole process routine from here on except debug
@@ -101,20 +102,20 @@ class AdvancedMover(PostProcessor):
 
         allFileLocations = []
         if os.path.isdir(filePath):
-            processLogger("Starting file scan on %s" % filePath)
+            processLogger(u"Starting file scan on %s" % filePath)
             for root, dirnames, filenames in os.walk(filePath):
                 if len(filenames):
-                    processLogger("I can see the files %s" % filenames)
+                    processLogger(u"I can see the files %s" % filenames)
                     for filename in filenames:
                         if filename.endswith(self._allowed_extensions_selected):
-                            if self.c.skip_sample and 'sample' in filename.lower():
-                                processLogger("Skipping sample: %s" % filename)
+                            if self.c.skip_sample and u'sample' in filename.lower():
+                                processLogger(u"Skipping sample: %s" % filename)
                                 continue
                             curImage = os.path.join(root, filename)
                             allFileLocations.append(curImage)
-                            processLogger("Found file: %s" % curImage)
+                            processLogger(u"Found file: %s" % curImage)
             if not allFileLocations:
-                processLogger("No files found!")
+                processLogger(u"No files found!")
                 #return (False, processLog[0])
         else:
             allFileLocations = [filePath]
@@ -122,16 +123,16 @@ class AdvancedMover(PostProcessor):
         success = True
         dest = None
         if allFileLocations:
-            processLogger("Possibly renaming and moving Files")
+            processLogger(u"Possibly renaming and moving Files")
             allFileLocations.sort()
             for index, curFile in enumerate(allFileLocations):
-                processLogger("Processing file: %s" % curFile)
+                processLogger(u"Processing file: %s" % curFile)
                 try:
                     extension = os.path.splitext(curFile)[1]
                     folderName = element.getName() if self.c.rename_folders_to_element else os.path.basename(os.path.dirname(curFile))
                     fileNameBase = element.getName() if self.c.rename_files_to_element else os.path.splitext(os.path.basename(curFile))[0]
                     newFileName = fixName(fileNameBase + extension, self.c.replace_space_with)
-                    processLogger("New Filename shall be: %s" % newFileName)
+                    processLogger(u"New Filename shall be: %s" % newFileName)
 
                     destFolder = os.path.join(destPath, fixName(folderName, self.c.replace_space_with))
                     if not os.path.isdir(destFolder):
@@ -139,15 +140,15 @@ class AdvancedMover(PostProcessor):
                     dest = os.path.join(destFolder, newFileName)
 
                     if self.c.copy:
-                        msg = "Copying %s to %s" % (curFile, dest)
+                        msg = u"Copying %s to %s" % (curFile, dest)
                         shutil.copytree(curFile, dest)
                     else:
-                        msg = "Moving %s to %s" % (curFile, dest)
+                        msg = u"Moving %s to %s" % (curFile, dest)
                         shutil.move(curFile, dest)
 
                 except Exception, msg:
-                    processLogger("Unable to rename and move File: %s. Please process manually" % curFile)
-                    processLogger("given ERROR: %s" % msg)
+                    processLogger(u"Unable to rename and move File: %s. Please process manually" % curFile)
+                    processLogger(u"given ERROR: %s" % msg)
                     success = False
 
         if not self.c.copy:
@@ -157,14 +158,19 @@ class AdvancedMover(PostProcessor):
                         fname = os.path.join(root, name)
                         if not os.listdir(fname): #to check wither the dir is empty
                             os.removedirs(fname)
-                            processLogger("removed empty folder %s" % fname)
+                            processLogger(u"removed empty folder %s" % fname)
                 if not os.listdir(filePath):
                     os.removedirs(filePath)
-                    processLogger("removed empty folder %s" % filePath)
+                    processLogger(u"removed empty folder %s" % filePath)
 
             if self.c.delete_folder_after_move:
                 shutil.rmtree(filePath)
-                processLogger("removed %s completely" % filePath)
+                processLogger(u"removed %s completely" % filePath)
+
+            # if original folder gone, delete location
+            if not os.listdir(filePath):
+                Location.select().where(path=filePath).delete()
+                processLogger(u"%s deleted, removing Location from Element" % filePath)
 
 
         processLogger("File processing done")

@@ -23,6 +23,7 @@
 from xdm.plugins import *
 from xdm import helper
 from xdm.classes import Location
+from collections import OrderedDict
 import time
 import os
 import shutil
@@ -34,7 +35,7 @@ class AdvancedMover(PostProcessor):
     # fix locations
     identifier = 'de.pannal.advancedmover'
     version = "0.11"
-    _config = {
+    _config = OrderedDict({
                 'copy': False,
                 'skip_sample': False,
                 "replace_space_with": " ",
@@ -52,7 +53,7 @@ class AdvancedMover(PostProcessor):
                         "use_checkboxes": True,
                         "required": True,
                     }
-    }
+    })
     screenName = 'Advanced Mover'
     config_meta = {'plugin_desc': 'This will move all the files with the given extensions from the path that is given to the path specified.',
                    'replace_space_with': {'desc': 'All spaces for the final file will be replaced with this.'},
@@ -63,18 +64,21 @@ class AdvancedMover(PostProcessor):
                    'rename_folders_to_element': {'desc': "Rename target folders to the element/download name"},
                    'rename_files_to_element': {'desc': "Rename target files to the element/download name"},
                    }
-    addMediaTypeOptions = "runFor"
-    #useConfigsForElementsAs = 'Enable'
+    #addMediaTypeOptions = True
+    useConfigsForElementsAs = 'Enable'
     _allowed_extensions = ()
     _selected_extensions = ()
 
     def __init__(self, instance='Default'):
         PostProcessor.__init__(self, instance=instance)
         # update allowed_extensions if plugin defaults were updated
-        if self.c.allowed_extensions.options != self._config["allowed_extensions"]["options"]:
-            opts = self._config["allowed_extensions"]
-            opts.update(self.c.allowed_extensions.selected)
-            self.c.allowed_extensions = opts
+        try:
+            if self.c.allowed_extensions.options != self._config["allowed_extensions"]["options"]:
+                opts = self._config["allowed_extensions"]
+                opts.update(self.c.allowed_extensions.selected)
+                self.c.allowed_extensions = opts
+        except AttributeError:
+            self.c.allowed_extensions = self._config["allowed_extensions"]
 
         self._allowed_extensions = tuple(self.c.allowed_extensions.options)
         self._allowed_extensions_selected = tuple(self.c.allowed_extensions.selected)

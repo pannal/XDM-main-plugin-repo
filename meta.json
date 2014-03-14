@@ -34,6 +34,22 @@
                 "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
             }
         ], 
+        "de.pannal.newznab.nzbsu": [
+            {
+                "major_version": 0, 
+                "minor_version": 71, 
+                "name": "NZBsu", 
+                "type": "Indexer", 
+                "format": "zip", 
+                "desc": "Generic Newznab indexer. Categories are there numerical id of Newznab, use \"Get categories\"", 
+                "xdm_version": [
+                    0, 
+                    5, 
+                    19
+                ], 
+                "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
+            }
+        ], 
         "de.pannal.sabnzbd": [
             {
                 "major_version": 0, 

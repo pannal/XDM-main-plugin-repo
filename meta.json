@@ -37,11 +37,11 @@
         "de.pannal.newznab.nzbsu": [
             {
                 "major_version": 0, 
-                "minor_version": 71, 
+                "minor_version": 72, 
                 "name": "NZBsu", 
                 "type": "Indexer", 
                 "format": "zip", 
-                "desc": "Generic Newznab indexer. Categories are there numerical id of Newznab, use \"Get categories\"", 
+                "desc": "Modified Newznab Indexer to work properly with NZB.su", 
                 "xdm_version": [
                     0, 
                     5, 

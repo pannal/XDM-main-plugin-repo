@@ -25,7 +25,7 @@ from xdm import helper
 from collections import OrderedDict
 
 class NZBsu(Indexer):
-    version = "0.71"
+    version = "0.72"
     identifier = "de.pannal.newznab.nzbsu"
     _config = OrderedDict([
                ('host', 'http://api.nzb.su/'),
@@ -220,7 +220,7 @@ class NZBsu(Indexer):
                 </script>
         """
 
-    config_meta = {'plugin_desc': 'Generic Newznab indexer. Categories are there numerical id of Newznab, use "Get categories"',
+    config_meta = {'plugin_desc': 'Modified Newznab Indexer to work properly with NZB.su',
                    'plugin_buttons': {'gather_gategories': {'action': _gatherCategories, 'name': 'Get categories'},
                                       'test_connection': {'action': _testConnection, 'name': 'Test connection'}},
                    }

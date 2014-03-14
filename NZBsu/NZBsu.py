@@ -25,7 +25,7 @@ from xdm import helper
 from collections import OrderedDict
 
 class NZBsu(Indexer):
-    version = "0.72"
+    version = "0.721"
     identifier = "de.pannal.newznab.nzbsu"
     _config = OrderedDict([
                ('host', 'http://api.nzb.su/'),
@@ -55,7 +55,9 @@ class NZBsu(Indexer):
         for c in self.c.configs:
             if "_category_" in c.name and c.value in (None, "None"):
                 cat = c.name.split("_")[-1]
-                setattr(self.c, c.name, str(self.defaultCategoryMap[cat]))
+                defCat = self.defaultCategoryMap.get(cat, None)
+                if defCat:
+                    setattr(self.c, c.name, str(defCat))
 
         # fix trailing slash
         #fixme: do real parsing

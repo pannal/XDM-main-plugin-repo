@@ -37,7 +37,7 @@
         "de.pannal.newznab.nzbsu": [
             {
                 "major_version": 0, 
-                "minor_version": 72, 
+                "minor_version": 721, 
                 "name": "NZBsu", 
                 "type": "Indexer", 
                 "format": "zip", 

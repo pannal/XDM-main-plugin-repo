@@ -1,6 +1,10 @@
 XDM-main-plugin-repo
 ====================
 
+Some advanced plugins for XDM.
+May need my modified XDM-develop branch for every plugin to work: https://github.com/pannal/XDM/tree/develop
+
+
 The official main Plugin Repository for [https://github.com/lad1337/XDM](https://github.com/lad1337/XDM)<br>
 
 

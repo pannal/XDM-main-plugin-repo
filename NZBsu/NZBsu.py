@@ -25,7 +25,7 @@ from xdm import helper
 from collections import OrderedDict
 
 class NZBsu(Indexer):
-    version = "0.722"
+    version = "0.723"
     identifier = "de.pannal.newznab.nzbsu"
     _config = OrderedDict([
                ('host', 'http://api.nzb.su/'),
@@ -59,11 +59,6 @@ class NZBsu(Indexer):
                 defCat = self.defaultCategoryMap.get(cat, None)
                 if defCat:
                     setattr(self.c, c.name, str(defCat))
-
-        # fix trailing slash
-        #fixme: do real parsing
-        self.c.host = self.c.host[:-1] if self.c.host.endswith("/") else self.c.host
-
 
     def _baseUrl(self, host, port=None):
         host = host or self.c.host

@@ -209,7 +209,7 @@ class Sabnzbd(Downloader):
             return (False, {}, 'We got some strange message from sab. I guess this wont work :/')
     _testConnection.args = ['host', 'port', 'apikey']
 
-    config_meta = {'plugin_desc': 'Sabnzb downloader. Send Nzbs and check for status',
+    config_meta = {'plugin_desc': 'More advanced SABnzbd downloader. Send Nzbs and check for status without relying on forged XDM-ID-download-naming',
                    'plugin_buttons': {'test_connection': {'action': _testConnection, 'name': 'Test connection'}},
                    'host': {'on_live_change': _testConnection},
                    'port': {'on_live_change': _testConnection},

@@ -34,6 +34,22 @@
                 "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
             }
         ], 
+        "de.pannal.games.OGDB": [
+            {
+                "major_version": 0, 
+                "minor_version": 1, 
+                "name": "OGDB", 
+                "type": "Provider", 
+                "format": "zip", 
+                "desc": "The alternative games DB, http://ogdb.eu/", 
+                "xdm_version": [
+                    0, 
+                    5, 
+                    19
+                ], 
+                "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
+            }
+        ], 
         "de.pannal.newznab.nzbsu": [
             {
                 "major_version": 0, 
@@ -57,7 +73,7 @@
                 "name": "Sabnzbd", 
                 "type": "Downloader", 
                 "format": "zip", 
-                "desc": "Sabnzb downloader. Send Nzbs and check for status", 
+                "desc": "More advanced SABnzbd downloader. Send Nzbs and check for status without relying on forged XDM-ID-download-naming", 
                 "xdm_version": [
                     0, 
                     5, 

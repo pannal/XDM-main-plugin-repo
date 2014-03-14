@@ -25,7 +25,7 @@ from xdm import helper
 from collections import OrderedDict
 
 class NZBsu(Indexer):
-    version = "0.721"
+    version = "0.722"
     identifier = "de.pannal.newznab.nzbsu"
     _config = OrderedDict([
                ('host', 'http://api.nzb.su/'),
@@ -34,7 +34,8 @@ class NZBsu(Indexer):
                ('enabled', True),
                ('comment_on_download', False),
                ('retention', 900),
-               ('verify_ssl_certificate', True)
+               ('verify_ssl_certificate', True),
+               ('user_agent', 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1883.0 Safari/537.36'),
                ])
 
     types = ['de.lad1337.nzb']
@@ -95,7 +96,7 @@ class NZBsu(Indexer):
                    }
 
         headers = {
-            'user-agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/35.0.1883.0 Safari/537.36',
+            'user-agent': self.c.user_agent,
         }
 
         downloads = []
@@ -160,8 +161,13 @@ class NZBsu(Indexer):
            'o': 'json',
            'q': 'testing_apikey'
            }
+
+        headers = {
+            'user-agent': self.c.user_agent,
+        }
+
         try:
-            r = requests.get(self._baseUrlApi(host, port), params=payload, verify=verify_ssl_certificate)
+            r = requests.get(self._baseUrlApi(host, port), params=payload, headers=headers, verify=verify_ssl_certificate)
         except:
             log.error("Error during test connection on $s" % self)
             return (False, {}, 'Please check host!')
@@ -177,7 +183,12 @@ class NZBsu(Indexer):
         payload = {'t': 'caps',
                    'o': 'json'
                    }
-        r = requests.get(self._baseUrlApi(self.c.host, self.c.port), params=payload, verify=verify_ssl_certificate)
+
+        headers = {
+            'user-agent': self.c.user_agent,
+        }
+
+        r = requests.get(self._baseUrlApi(self.c.host, self.c.port), params=payload, headers=headers, verify=verify_ssl_certificate)
 
         data = {}
         for cat in r.json()['categories']['category']:

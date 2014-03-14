@@ -34,26 +34,10 @@
                 "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
             }
         ], 
-        "de.pannal.games.OGDB": [
-            {
-                "major_version": 0, 
-                "minor_version": 1, 
-                "name": "OGDB", 
-                "type": "Provider", 
-                "format": "zip", 
-                "desc": "The alternative games DB, http://ogdb.eu/", 
-                "xdm_version": [
-                    0, 
-                    5, 
-                    19
-                ], 
-                "download_url": "https://github.com/pannal/XDM-pannal-plugin-repo/archive/master.zip"
-            }
-        ], 
         "de.pannal.newznab.nzbsu": [
             {
                 "major_version": 0, 
-                "minor_version": 722, 
+                "minor_version": 723, 
                 "name": "NZBsu", 
                 "type": "Indexer", 
                 "format": "zip", 

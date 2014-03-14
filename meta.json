@@ -1,6 +1,6 @@
 {
     "name": "XDM pannal repo", 
-    "info_url": "https://github.com/pannal/XDM-pannal-plugin-repo/tree/master", 
+    "info_url": "https://github.com/pannal/XDM-pannal-plugin-repo/", 
     "plugins": {
         "de.pannal.advancedmover": [
             {
